@@ -1,0 +1,15 @@
+extends /layout/_DefaultLayout
+
+prepend ConfigBlock
+  - page_name = ''
+
+//- append StylesheetBlock
+
+//- append JavascriptBlock
+
+block ContentBlock
+    h2 Facetracking example
+    #renderer
+    #container
+        video#videoel(width='600', height='400', preload='auto', loop='')
+        canvas#overlay(style='', width='600', height='400')
