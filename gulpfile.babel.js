@@ -18,7 +18,7 @@ import RevLogger from 'rev-logger';
 // const
 const SRC = './src';
 const CONFIG = './src/config';
-const HTDOCS = './public';
+const HTDOCS = './docs';
 const BASE_PATH = '';
 const DEST = `${HTDOCS}${BASE_PATH}`;
 
@@ -56,7 +56,7 @@ gulp.task('pug', () => {
     const locals = readConfig(`${CONFIG}/meta.yml`);
     locals.versions = revLogger.versions();
     locals.basePath = BASE_PATH;
-    
+
     return gulp.src(`${SRC}/pug/**/[!_]*.pug`)
         .pipe(pug({
             locals: locals,
