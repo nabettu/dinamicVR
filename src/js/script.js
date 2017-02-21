@@ -8,6 +8,11 @@ var overlayCC = overlay.getContext('2d');
 var ctrack = new clm.tracker({useWebGL: true});
 ctrack.init(pModel);
 
+var stats = new Stats();
+stats.domElement.style.position = 'absolute';
+stats.domElement.style.top = '0px';
+document.getElementById('container').appendChild( stats.domElement );
+
 function enablestart() {
     // start video
     vid.play();
@@ -80,8 +85,8 @@ function distance(p1, p2) {
     }
 };
 
-var width = 600;
-var height = 400;
+var width = 900;
+var height = 680;
 
 const faceBaseSize = 130;
 function setPosition(x, y, w) {
@@ -103,6 +108,24 @@ var near = 1;
 var far = 1000;
 var camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
+
+var Params = function() {
+  this.dat_mesh_z = -0.1;
+  this.dat_mesh_x = 40;
+  this.dat_mesh_y = -1.2;
+  this.dat_camera_y = -45;
+};
+var params = new Params();
+var gui = new dat.GUI();
+
+window.onload = function() {
+  gui.add(params, 'dat_mesh_z', -1, 2);
+  gui.add(params, 'dat_mesh_x', 0, 200);
+  gui.add(params, 'dat_mesh_y', -3, 5);
+  gui.add(params, 'dat_camera_y', -200, 200);
+};
+
+
 var main = function() {
     var scene = new THREE.Scene();
 
@@ -117,14 +140,18 @@ var main = function() {
     var geometry = new THREE.CubeGeometry(30, 30, 30);
     var material = new THREE.MeshPhongMaterial({color: 0xff0000});
     var mesh = new THREE.Mesh(geometry, material);
+    mesh.rotation.set(0, 45, 5);
     scene.add(mesh);
+    camera.position.set(0, 0, 150);
 
     (function renderLoop() {
         requestAnimationFrame(renderLoop);
-        // console.log(cx, cy);
-        mesh.rotation.set(0, mesh.rotation.y + .01, mesh.rotation.z + .01);
-        camera.position.set(cx * width / 20, -1 * cy * height / 20, 30 * cz + 150);
+        console.log(cx, cy);
+        console.log("aaa: " + params.dat_mesh_z);
+        mesh.rotation.set(cy * params.dat_mesh_y, - 45 * cx / params.dat_mesh_x, params.dat_mesh_z);
+        camera.position.set(0, cy * params.dat_camera_y , 150);
         renderer.render(scene, camera);
+        stats.update();
     })();
 };
 
